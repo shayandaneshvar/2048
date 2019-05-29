@@ -1,6 +1,9 @@
-import controller.Controller;
+import view.View;
 
-public class Main {
-    private Controller controller;
+public class Main /*extends View*/{
 
+    public static void main(String[] args) {
+//        View view = new View();
+//        launch(args);
+    }
 }
