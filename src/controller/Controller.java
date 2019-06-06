@@ -5,8 +5,14 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import model.Board;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 import view.View;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 
 public class Controller {
@@ -30,11 +36,15 @@ public class Controller {
         keyPressed = KeyCode.SPACE;
         scene.setOnKeyPressed(event -> {
             keyPressed = event.getCode();
-            handleModel();
+            try {
+                handleModel();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
     }
 
-    private void handleModel() {
+    private void handleModel() throws IOException {
 //        Platform.runLater(() -> {
             switch (keyPressed) {
                 case UP:
@@ -42,12 +52,17 @@ public class Controller {
                     break;
                 case DOWN:
                     board.handleSwipeDown();
+                    break;
                 case LEFT:
                     board.handleSwipeLeft();
+                    break;
                 case RIGHT:
                     board.handleSwipeRight();
+                    break;
                 default:
-                    //make noise
+                    InputStream inputStream = new FileInputStream("kicked.wav");
+                    AudioStream audioStream = new AudioStream(inputStream);
+                    AudioPlayer.player.start(audioStream);
             }
             System.out.println(Arrays.deepToString(board.getBoard()));
             System.out.println(Arrays.toString(board.getBoard()[0]));
