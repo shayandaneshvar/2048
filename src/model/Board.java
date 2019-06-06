@@ -17,15 +17,11 @@ public class Board implements Observable {
         this.board = board;
         this.score = 0;
         isGameOver = false;
-        generateNewNumber(board[0].length,board);
+        generateNewNumber(board[0].length, board);
     }
 
     public int[][] getBoard() {
         return board;
-    }
-
-    public void setBoard(int[][] board) {
-        this.board = board;
     }
 
     public void handleSwipeUp() {
@@ -86,8 +82,7 @@ public class Board implements Observable {
         updateAllObservers();
     }
 
-    public boolean isGameOver()
-    {
+    public boolean isGameOver() {
         return isGameOver;
     }
 
@@ -110,6 +105,47 @@ public class Board implements Observable {
         updateAllObservers();
     }
 
+    private boolean handleNorthBlock(int yCoord, int xCoord) {
+        if (board[yCoord][xCoord] == board[yCoord - 1][xCoord] || board[yCoord - 1][xCoord] == 0) {
+            board[yCoord - 1][xCoord] = board[yCoord][xCoord] + board[yCoord - 1][xCoord];
+            board[yCoord][xCoord] = 0;
+            score += board[yCoord - 1][xCoord];
+            return true;
+        }
+        return false;
+    }
+
+    private boolean handleSouthBlock(int yCoord, int xCoord) {
+        if (board[yCoord][xCoord] == board[yCoord + 1][xCoord] || board[yCoord + 1][xCoord] == 0) {
+            board[yCoord + 1][xCoord] = board[yCoord][xCoord] + board[yCoord + 1][xCoord];
+            board[yCoord][xCoord] = 0;
+            score += board[yCoord + 1][xCoord];
+            return true;
+        }
+        return false;
+
+    }
+
+    private boolean handleWestBlock(int yCoord, int xCoord) {
+        if (board[yCoord][xCoord] == board[yCoord][xCoord - 1] || board[yCoord][xCoord - 1] == 0) {
+            board[yCoord][xCoord - 1] = board[yCoord][xCoord] + board[yCoord][xCoord - 1];
+            board[yCoord][xCoord] = 0;
+            score += board[yCoord][xCoord - 1];
+            return true;
+        }
+        return false;
+    }
+
+    private boolean handleEastBlock(int yCoord, int xCoord) {
+        if (board[yCoord][xCoord] == board[yCoord][xCoord + 1] || board[yCoord][xCoord + 1] == 0) {
+            board[yCoord][xCoord + 1] = board[yCoord][xCoord] + board[yCoord][xCoord + 1];
+            board[yCoord][xCoord] = 0;
+            score += board[yCoord][xCoord + 1];
+            return true;
+        }
+        return false;
+    }
+
     private static boolean isGameOver(int[][] board) {
         //Note that this is a hard one - can change it later
         for (int i = 0; i < board[0].length; i++) {
@@ -122,46 +158,6 @@ public class Board implements Observable {
         return true;
     }
 
-    private boolean handleNorthBlock(int yCoord, int xCoord) {
-        if (board[yCoord][xCoord] == board[yCoord - 1][xCoord]) {
-            board[yCoord - 1][xCoord] *= 2;
-            board[yCoord][xCoord] = 0;
-            score += board[yCoord - 1][xCoord];
-            return true;
-        }
-        return false;
-    }
-
-    private boolean handleSouthBlock(int yCoord, int xCoord) {
-        if (board[yCoord][xCoord] == board[yCoord + 1][xCoord]) {
-            board[yCoord + 1][xCoord] *= 2;
-            board[yCoord][xCoord] = 0;
-            score += board[yCoord + 1][xCoord];
-            return true;
-        }
-        return false;
-
-    }
-
-    private boolean handleWestBlock(int yCoord, int xCoord) {
-        if (board[yCoord][xCoord] == board[yCoord][xCoord - 1]) {
-            board[yCoord][xCoord - 1] *= 2;
-            board[yCoord][xCoord] = 0;
-            score += board[yCoord][xCoord - 1];
-            return true;
-        }
-        return false;
-    }
-
-    private boolean handleEastBlock(int yCoord, int xCoord) {
-        if (board[yCoord][xCoord] == board[yCoord][xCoord + 1]) {
-            board[yCoord][xCoord + 1] *= 2;
-            board[yCoord][xCoord] = 0;
-            score += board[yCoord + 1][xCoord];
-            return true;
-        }
-        return false;
-    }
 
     private static void generateNewNumber(int length, int[][] board) {
         Random random = new Random();

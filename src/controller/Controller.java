@@ -1,10 +1,13 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import model.Board;
 import view.View;
+
+import java.util.Arrays;
 
 public class Controller {
     private Board board;
@@ -32,8 +35,8 @@ public class Controller {
     }
 
     private void handleModel() {
-        Thread thread = new Thread(()->{
-            switch (keyPressed){
+//        Platform.runLater(() -> {
+            switch (keyPressed) {
                 case UP:
                     board.handleSwipeUp();
                     break;
@@ -43,10 +46,16 @@ public class Controller {
                     board.handleSwipeLeft();
                 case RIGHT:
                     board.handleSwipeRight();
-                    default:
-                        //make noise
+                default:
+                    //make noise
             }
-        });
+            System.out.println(Arrays.deepToString(board.getBoard()));
+            System.out.println(Arrays.toString(board.getBoard()[0]));
+            System.out.println(Arrays.toString(board.getBoard()[1]));
+            System.out.println(Arrays.toString(board.getBoard()[2]));
+            System.out.println(Arrays.toString(board.getBoard()[3]));
+            keyPressed = KeyCode.SPACE;
+//        });
         //todo
     }
 }

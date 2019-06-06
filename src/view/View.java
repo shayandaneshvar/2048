@@ -30,12 +30,12 @@ public class View implements Observer/*, Runnable*/ {
     public void drawBoard(Board board) {
         boardGame.getChildren().clear();
 
-        for(int i = 0;i<board.getBoard().length;i++){
-            for(int j=0;j<board.getBoard()[0].length;j++){
+        for(int j = 0;j<board.getBoard().length;j++){
+            for(int i=0;i<board.getBoard()[0].length;i++){
                 StackPane stack = new StackPane();
-                Rectangle cell = new Rectangle(200,200, Color.rgb(255,
-                        board.getBoard()[i][j]%256,
-                        255 - board.getBoard()[i][j]%256));
+                Rectangle cell = new Rectangle(200,200, Color.rgb(205,
+                        board.getBoard()[i][j]%200+56,
+                        100 - board.getBoard()[i][j]%100));
 //                cell.setOpacity(board.getBoard()[i][j]/2048d);
                 cell.setStroke(Color.BLACK);
                 cell.setArcHeight(20);
@@ -48,7 +48,7 @@ public class View implements Observer/*, Runnable*/ {
                     label.setText(String.valueOf(board.getBoard()[i][j]));
                 }
                 stack.getChildren().addAll(cell,label);
-                boardGame.add(stack,i,j,1,1);
+                boardGame.add(stack,j,i,1,1);
             }
         }
     }
