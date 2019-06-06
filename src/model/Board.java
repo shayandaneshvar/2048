@@ -17,6 +17,7 @@ public class Board implements Observable {
         this.board = board;
         this.score = 0;
         isGameOver = false;
+        generateNewNumber(board[0].length,board);
     }
 
     public int[][] getBoard() {
@@ -85,7 +86,8 @@ public class Board implements Observable {
         updateAllObservers();
     }
 
-    public boolean isGameOver() {
+    public boolean isGameOver()
+    {
         return isGameOver;
     }
 
@@ -165,8 +167,8 @@ public class Board implements Observable {
         Random random = new Random();
         int xAxis, yAxis;
         do {
-            xAxis = random.nextInt() % length;
-            yAxis = random.nextInt() % length;
+            xAxis = Math.abs(random.nextInt()) % length;
+            yAxis = Math.abs(random.nextInt()) % length;
             if (!isOccupied(yAxis, xAxis, board)) {
                 board[yAxis][xAxis] = 2;
                 break;
