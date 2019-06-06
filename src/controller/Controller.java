@@ -1,6 +1,5 @@
 package controller;
 
-import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -10,7 +9,6 @@ import sun.audio.AudioStream;
 import view.View;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -37,7 +35,9 @@ public class Controller {
         scene.setOnKeyPressed(event -> {
             keyPressed = event.getCode();
             try {
-                handleModel();
+                if (!board.isGameOver()) {
+                    handleModel();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -46,31 +46,32 @@ public class Controller {
 
     private void handleModel() throws IOException {
 //        Platform.runLater(() -> {
-            switch (keyPressed) {
-                case UP:
-                    board.handleSwipeUp();
-                    break;
-                case DOWN:
-                    board.handleSwipeDown();
-                    break;
-                case LEFT:
-                    board.handleSwipeLeft();
-                    break;
-                case RIGHT:
-                    board.handleSwipeRight();
-                    break;
-                default:
-                    InputStream inputStream = new FileInputStream("kicked.wav");
-                    AudioStream audioStream = new AudioStream(inputStream);
-                    AudioPlayer.player.start(audioStream);
-            }
-            System.out.println(Arrays.deepToString(board.getBoard()));
-            System.out.println(Arrays.toString(board.getBoard()[0]));
-            System.out.println(Arrays.toString(board.getBoard()[1]));
-            System.out.println(Arrays.toString(board.getBoard()[2]));
-            System.out.println(Arrays.toString(board.getBoard()[3]));
-            keyPressed = KeyCode.SPACE;
+        switch (keyPressed) {
+            case UP:
+                board.handleSwipeUp();
+                break;
+            case DOWN:
+                board.handleSwipeDown();
+                break;
+            case LEFT:
+                board.handleSwipeLeft();
+                break;
+            case RIGHT:
+                board.handleSwipeRight();
+                break;
+            case ENTER:
+                //restart The Program
+            default:
+                InputStream inputStream = new FileInputStream("kicked.wav");
+                AudioStream audioStream = new AudioStream(inputStream);
+                AudioPlayer.player.start(audioStream);
+        }
+        System.out.println(Arrays.deepToString(board.getBoard()));
+        System.out.println(Arrays.toString(board.getBoard()[0]));
+        System.out.println(Arrays.toString(board.getBoard()[1]));
+        System.out.println(Arrays.toString(board.getBoard()[2]));
+        System.out.println(Arrays.toString(board.getBoard()[3]));
+        keyPressed = KeyCode.SPACE;
 //        });
-        //todo
     }
 }

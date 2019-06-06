@@ -2,6 +2,7 @@ package model;
 
 import view.Observer;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -26,7 +27,7 @@ public class Board implements Observable {
 
     public void handleSwipeUp() {
         boolean hasBoardChanged = false;
-        boolean temp = false;
+        boolean temp;
         for (int j = 0; j < board.length - 1; j++) {
             for (int i = 0; i < board[0].length; i++) {
                 temp = handleNorthBlock(board[0].length - 1 - j, i);
@@ -38,14 +39,14 @@ public class Board implements Observable {
         if (hasBoardChanged && !isGameOver(board)) {
             generateNewNumber(board[0].length, board);
         } else if (!hasBoardChanged) {
-            isGameOver = true;
+            isGameOver = isGameOver(board);
         }
         updateAllObservers();
     }
 
     public void handleSwipeRight() {
         boolean hasBoardChanged = false;
-        boolean temp = false;
+        boolean temp;
         for (int j = 0; j < board.length; j++) {
             for (int i = 0; i < board[0].length - 1; i++) {
                 temp = handleEastBlock(j, i);
@@ -57,7 +58,7 @@ public class Board implements Observable {
         if (hasBoardChanged && !isGameOver(board)) {
             generateNewNumber(board[0].length, board);
         } else if (!hasBoardChanged) {
-            isGameOver = true;
+            isGameOver = isGameOver(board);
         }
         updateAllObservers();
     }
@@ -65,7 +66,7 @@ public class Board implements Observable {
 
     public void handleSwipeLeft() {
         boolean hasBoardChanged = false;
-        boolean temp = false;
+        boolean temp;
         for (int j = 0; j < board.length; j++) {
             for (int i = 0; i < board[0].length - 1; i++) {
                 temp = handleWestBlock(j, board.length - i - 1);
@@ -77,7 +78,7 @@ public class Board implements Observable {
         if (hasBoardChanged && !isGameOver(board)) {
             generateNewNumber(board[0].length, board);
         } else if (!hasBoardChanged) {
-            isGameOver = true;
+            isGameOver = isGameOver(board);
         }
         updateAllObservers();
     }
@@ -88,7 +89,7 @@ public class Board implements Observable {
 
     public void handleSwipeDown() {
         boolean hasBoardChanged = false;
-        boolean temp = false;
+        boolean temp;
         for (int j = 0; j < board.length - 1; j++) {
             for (int i = 0; i < board[0].length; i++) {
                 temp = handleSouthBlock(j, i);
@@ -100,7 +101,7 @@ public class Board implements Observable {
         if (hasBoardChanged && !isGameOver(board)) {
             generateNewNumber(board[0].length, board);
         } else if (!hasBoardChanged) {
-            isGameOver = true;
+            isGameOver = isGameOver(board);
         }
         updateAllObservers();
     }
@@ -180,10 +181,9 @@ public class Board implements Observable {
     }
 
 
-    public void setScore(int score) {
-        this.score = score;
-    }
-
+    //    public void setScore(int score) {
+//        this.score = score;
+//    }
     public int getScore() {
         return score;
     }
@@ -195,6 +195,12 @@ public class Board implements Observable {
 
     @Override
     public void updateAllObservers() {
-        observers.stream().forEach(x -> x.update(this));
+        observers.stream().forEach(x -> {
+            try {
+                x.update(this);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

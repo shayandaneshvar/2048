@@ -1,16 +1,23 @@
 package view;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import model.Board;
 import model.Observable;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class View implements Observer/*, Runnable*/ {
     private Group root;
@@ -50,19 +57,39 @@ public class View implements Observer/*, Runnable*/ {
                 stack.getChildren().addAll(cell, label);
                 boardGame.add(stack, j, i, 1, 1);
             }
+            Label label =
+                    new Label("Score :" + board.getScore());
+            label.setStyle("-fx-background-color: blue;-fx-text-fill: White");
+            root.getChildren().add(label);
         }
     }
 
 
     @Override
-    public void update(Observable changedObservable) {
+    public void update(Observable changedObservable) throws IOException {
         drawBoard((Board) changedObservable);
         if (((Board) changedObservable).isGameOver()) {
             System.out.println("Game Over");
+            int score = ((Board) changedObservable).getScore();
+            System.out.println(((Board) changedObservable).getScore());
+            root.getChildren().clear();
+            VBox vBox = new VBox();
+            Text gameOver = new Text("Game Over");
+            gameOver.setFont(Font.font("Monospaced", 100));
+            Text scoreText = new Text(String.valueOf(score));
+            Label ssd = new Label("Made By S.Shayan Daneshvar");
+            scoreText.setFont(Font.font("Monospaced", 100));
+            ssd.setFont(Font.font("Gothic", 20));
+            ssd.setPadding(new Insets(100));
+            vBox.getChildren().addAll(gameOver, scoreText, ssd);
+            root.getChildren().add(vBox);
+            vBox.setAlignment(Pos.CENTER);
+            vBox.setPadding(new Insets(180));
+            InputStream inputStream = new FileInputStream("benny1.wav");
+            AudioStream audioStream = new AudioStream(inputStream);
+            AudioPlayer.player.start(audioStream);
         }
     }
-
-
 //    @Override
 //    public void run() {
 //        //todo
